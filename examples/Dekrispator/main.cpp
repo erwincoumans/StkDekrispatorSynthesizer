@@ -14,7 +14,7 @@
 
 bool    demoMode = true;
 bool    freeze = false;
-double masterVolume = 0.5;//in range 0..1
+double masterVolume = 0.4;//in range 0..1
 
 #define MAX_MIDI_DEVICES 10
 //Simple C-API to Dekrispator

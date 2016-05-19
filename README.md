@@ -13,6 +13,10 @@ In a terminal type:
 
 	cd build3
 
+On Linux you need to install ALSA development:
+
+	sudo apt-get install libasound2-dev
+
 Dependend on your system (Linux 32bit, 64bit, rPI or Mac OSX) use one of the following lines
 
 	./premake4_linux     gmake

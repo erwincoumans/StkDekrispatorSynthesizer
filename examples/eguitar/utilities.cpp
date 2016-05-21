@@ -125,24 +125,36 @@ bool parseArgs(int nArgs, char *args[], WvOut **output, Messager& messager1,Mess
 
       case 'm':
 #if defined(__STK_REALTIME__)
-			  if (numMidi==0)
-			  {
-				  numMidi++;
+if (numMidi==0)
+{
+	numMidi++;
         // Check for an optional MIDI port argument.
-        if ((i+1 < nArgs) && args[i+1][0] != '-') {
-			int port = 2;//atoi(args[++i]);
+        if ((i+1 < nArgs) && args[i+1][0] != '-') 
+		{
+			int port = atoi(args[++i]);
           if ( !messager1.startMidiInput( port-1 ) ) exit(0);
         }
-        else if ( !messager1.startMidiInput() ) exit(0);
-			  } else{
+        else 
+		{
+			if ( !messager1.startMidiInput() ) exit(0);
+		}
+}
+else
+{
 				  // Check for an optional MIDI port argument.
-				  if ((i+1 < nArgs) && args[i+1][0] != '-') {
+				  if ((i+1 < nArgs) && args[i+1][0] != '-') 
+				  {
 					  int port = atoi(args[++i]);
-					  if ( !messager2.startMidiInput( port-1 ) ) exit(0);
+					  if ( !messager2.startMidiInput( port-1 ) ) 
+						  exit(0);
 				  }
-				  else if ( !messager2.startMidiInput() ) exit(0);
-				  
-			  }
+				  else 
+				  {
+					  if ( !messager2.startMidiInput() ) 
+						  exit(0);
+				  }
+			  
+}
         nWvIns++;
         break;
 #else

@@ -99,7 +99,6 @@
 			{
         		'ARCHS = "$(ARCHS_STANDARD_32_BIT) $(ARCHS_STANDARD_64_BIT)"',
         		'VALID_ARCHS = "x86_64 i386"',
-			'SDKROOT = "macosx10.9"',
 			}
 	end
 
@@ -126,6 +125,7 @@ if findOpenGL3() then
 
 	include "../examples/Dekrispator"
 --	include "../examples/ragamatic"
+	include "../examples/eguitar"
 	include "../btgui/Bullet3Common"
  	include "../stk/src"
  

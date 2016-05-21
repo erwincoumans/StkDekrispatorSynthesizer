@@ -52,7 +52,7 @@ static void finish(int ignore){ done = true; }
 
 using namespace stk;
 
-const unsigned int nStrings = 6;
+const unsigned int nStrings = 12;
 
 // Data structure for string information.
 struct StringInfo{
@@ -93,7 +93,7 @@ struct TickData {
 
   // Default constructor.
   TickData()
-    : wvout(0), volume(1.0), t60(0.75),
+    : wvout(0), volume(22.0), t60(0.75),
       nWvOuts(0), channels(2), counter(0),
       realtime( false ), settling( false ), haveMessage( false ),
       keysDown(0), feedbackSample( 0.0 ) {}
@@ -109,7 +109,7 @@ void processMessage( TickData* data )
   register StkFloat value1 = data->message.floatValues[0];
   register StkFloat value2 = data->message.floatValues[1];
   unsigned int channel = (unsigned int) data->message.channel;
-printf("message : %ld, value1=%f, value2=%f\n", data->message.type,value1,value2);
+	
   switch( data->message.type ) {
 
   case __SK_Exit_:
@@ -129,7 +129,10 @@ printf("message : %ld, value1=%f, value2=%f\n", data->message.type,value1,value2
         if ( s == nStrings ) break;
         data->voices[s].inUse = true;
         data->voices[s].iNote = iNote;
+		 
+		  
         data->guitar->noteOn( Midi2Pitch[iNote], value2 * ONE_OVER_128, s );
+
         data->keysDown++;
         // If first key down, turn on feedback gain
         if ( data->keysDown == 1 )
@@ -195,7 +198,7 @@ printf("message : %ld, value1=%f, value2=%f\n", data->message.type,value1,value2
 
   } // end of switch
 
-  data->haveMessage = false;
+	data->haveMessage = false;
   return;
 
  settle:
@@ -220,6 +223,7 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
   while ( nTicks > 0 && !done ) {
 
     if ( !data->haveMessage ) {
+		
       data->messager1.popMessage( data->message );
       if ( data->message.type > 0 ) {
         data->counter = (long) (data->message.time * Stk::sampleRate());
@@ -263,8 +267,11 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
     }
     if ( nTicks == 0 ) break;
 
-    // Process control messages.
-    if ( data->haveMessage ) processMessage( data );
+        if ( data->haveMessage ) 
+	{
+		// Process control messages.
+		processMessage( data );
+	}
   }
 
   return 0;

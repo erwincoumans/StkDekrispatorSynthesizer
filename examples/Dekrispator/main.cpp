@@ -100,7 +100,7 @@ void processMessage( TickData* data )
 	register StkFloat value1 = data->message.floatValues[0];
 	register StkFloat value2 = data->message.floatValues[1];
 	unsigned int channel = (unsigned int) data->message.channel;
-//	printf("message : %ld, value1=%f, value2=%f\n", data->message.type,value1,value2);
+	//printf("message : %ld, value1=%f, value2=%f\n", data->message.type,value1,value2);
 	
 	if (data->message.intValues.size()>=2)
 	{

@@ -140,7 +140,7 @@ inline StkFloat Guitar :: tick( StkFloat input )
     if ( stringState_[i] ) {
       temp = input;
       // If pluckGain < 0.2, let string ring but don't pluck it.
-      if ( filePointer_[i] < excitation_.frames() && pluckGains_[i] > 0.2 )
+      if ( filePointer_[i] < excitation_.frames())// && pluckGains_[i] > 0.2 )
         temp += pluckGains_[i] * excitation_[filePointer_[i]++];
       temp += couplingGain_ * couplingFilter_.tick( lastFrame_[0] ); // bridge coupling
       output += strings_[i].tick( temp );

@@ -103,6 +103,7 @@ bool Messager :: setScoreFile( const char* filename )
 
 void Messager :: popMessage( Skini::Message& message )
 {
+//	printf(" data_.queue.size() = %d\n",data_.queue.size());
   if ( data_.sources == STK_FILE ) { // scorefile input
     if ( !data_.skini.nextMessage( message ) )
       message.type = __SK_Exit_;

@@ -9,14 +9,14 @@ Click on build3/vs2010.bat and open build3/vs2010/0MySolution.sln
 
 **Linux, Raspberry Pi and Mac OSX gnu make**
 
-In a terminal type:
-
-	cd build3
-
-On Linux you need to install ALSA, pthread and jack:
+On Linux you may need to install ALSA, pthread:
 
 	sudo apt-get install libasound2-dev
 	sudo apt-get install libpthread-stubs0-dev
+
+On Linux, you may try to run the build_and_run.sh script from a terminal. Otherwise follow those steps:
+
+	cd build3
 
 Dependend on your system (Linux 32bit, 64bit, rPI or Mac OSX) use one of the following lines
 

@@ -13,9 +13,10 @@ In a terminal type:
 
 	cd build3
 
-On Linux you need to install ALSA development:
+On Linux you need to install ALSA, pthread and jack:
 
 	sudo apt-get install libasound2-dev
+	sudo apt-get install libpthread-stubs0-dev
 
 Dependend on your system (Linux 32bit, 64bit, rPI or Mac OSX) use one of the following lines
 

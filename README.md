@@ -14,7 +14,11 @@ On Linux you may need to install ALSA, pthread:
 	sudo apt-get install libasound2-dev
 	sudo apt-get install libpthread-stubs0-dev
 
-On Linux, you may try to run the build_and_run.sh script from a terminal. Otherwise follow those steps:
+On Linux, you may try to run the following script terminal:
+
+	./build_and_run.sh
+
+Otherwise follow the steps:
 
 	cd build3
 

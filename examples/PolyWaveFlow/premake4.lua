@@ -25,7 +25,7 @@
 		
 if os.is("Linux") then initX11() 
     defines  {"__OS_LINUX__","__LINUX_JACK__","__LITTLE_ENDIAN__"}
-	links {"pthreads","jack"}
+	links {"pthread"}
 end
 
 if os.is("MacOSX") then

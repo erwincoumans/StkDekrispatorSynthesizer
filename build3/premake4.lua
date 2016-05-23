@@ -125,8 +125,8 @@ if findOpenGL3() then
 
 	include "../examples/Dekrispator"
 --	include "../examples/ragamatic"
-	include "../examples/eguitar"
-	include "../examples/PolyWaveFlow"
+--	include "../examples/eguitar"
+--	include "../examples/PolyWaveFlow"
 	include "../btgui/Bullet3Common"
  	include "../stk/src"
  

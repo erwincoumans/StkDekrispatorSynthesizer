@@ -5217,6 +5217,7 @@ unsigned int RtApiDs :: getDefaultInputDevice( void )
   return 0;
 }
 
+
 unsigned int RtApiDs :: getDeviceCount( void )
 {
   // Set query flag for previously found devices to false, so that we

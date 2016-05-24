@@ -12,9 +12,12 @@
 #include <algorithm>
 #include <cstdlib>
 
-bool    demoMode = true;
-bool    freeze = false;
-double masterVolume = 0.3;//in range 0..1
+extern "C" {
+	bool    demoMode = true;
+	bool    freeze = false;
+
+	double masterVolume = 0.3;//in range 0..1
+};
 
 #define MAX_MIDI_DEVICES 10
 //Simple C-API to Dekrispator
@@ -206,6 +209,7 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
   register StkFloat temp, outs[2], *samples = (StkFloat *) outputBuffer;
   int i, voiceNote, counter, nTicks = (int) nBufferFrames;
 
+
   while ( nTicks > 0 && !done ) {
 
     if ( !data->haveMessage1 ) 
@@ -251,6 +255,7 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
 
   return 0;
 }
+
 
 int main( int argc, char *argv[] )
 {
@@ -324,10 +329,15 @@ int main( int argc, char *argv[] )
       usage();
   }
 
+  if (data.numMessagers == 0)
+  {
+	        data.messagers[data.numMessagers++].startStdInput();
+
+  }
   // Allocate the dac here.
   RtAudioFormat format = ( sizeof(StkFloat) == 8 ) ? RTAUDIO_FLOAT64 : RTAUDIO_FLOAT32;
   RtAudio::StreamParameters parameters;
-  parameters.deviceId = dac.getDefaultOutputDevice();
+  parameters.deviceId = 1;// dac.getDefaultOutputDevice();
   parameters.nChannels = 2;
   unsigned int bufferFrames = RT_BUFFER_SIZE;
   try {

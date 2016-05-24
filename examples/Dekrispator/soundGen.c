@@ -502,7 +502,7 @@ void sequencer_newStep_action(void) // User callback function called by sequence
 			AdditiveGen_newWaveform();
 	}
 
-	f0 = 440;//notesFreq[seq.track1.note[seq.step_idx]]; // Main "melody" frequency
+	f0 = notesFreq[seq.track1.note[seq.step_idx]]; // Main "melody" frequency
 	vol = frand_a_b(0.4f , .8f); // slightly random volume for each note
 }
 
@@ -678,8 +678,8 @@ void make_sound_double(double *buf_double , uint16_t length) // To be used with 
 			y = Delay_compute(y);
 		
 		/*---  Apply phaser effect ----*/
-		//if (phaserON) 	
-		//	y = Phaser_compute(y);
+		if (phaserON)
+			y = Phaser_compute(y);
 		
 		/*--- Apply chorus/flanger effect ---*/
 		if (chorusON) stereoChorus_compute (&yL, &yR, y) ;

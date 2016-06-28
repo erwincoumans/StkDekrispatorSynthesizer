@@ -1,0 +1,20 @@
+Section "Device"
+        Identifier      "RPUSBDispFB"
+        Driver          "fbdev"
+        Option          "fbdev"         "/dev/fb1"
+EndSection
+
+Section "Screen"
+        Identifier      "RPUSBDisp"
+        Device          "RPUSBDispFB"
+        DefaultFbBpp    16
+        SubSection "Display"
+                Visual  "TrueColor"
+        EndSubSection
+EndSection
+
+Section "InputClass"
+        Identifier      "RPUSBTouch"
+        MatchDevicePath "/dev/input/event*"
+        Driver          "evdev"
+EndSection

@@ -129,6 +129,7 @@ if findOpenGL3() then
 --	include "../examples/PolyWaveFlow"
 	include "../btgui/Bullet3Common"
  	include "../stk/src"
+ 	include "../CloudSeed"
  
    
 	if _OPTIONS["with_opengl_demo"] then

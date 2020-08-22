@@ -12,6 +12,77 @@
 #include <algorithm>
 #include <cstdlib>
 
+
+#include "../../CloudSeed/Default.h"
+#include "../../CloudSeed/ReverbController.h"
+#include "../../CloudSeed/FastSin.h"
+#include "../../CloudSeed/AudioLib\ValueTables.h"
+
+using namespace CloudSeed;
+bool isInitialized = false;
+
+extern "C"
+{
+	ReverbController* Create(int samplerate)
+	{
+		if (!isInitialized)
+		{
+			AudioLib::ValueTables::Init();
+			FastSin::Init();
+			isInitialized = true;
+		}
+
+		return new ReverbController(samplerate);
+	}
+
+	 void Delete(ReverbController* item)
+	{
+		delete item;
+	}
+
+	 int GetSamplerate(ReverbController* item)
+	{
+		return item->GetSamplerate();
+	}
+
+	 void SetSamplerate(ReverbController* item, int samplerate)
+	{
+		return item->SetSamplerate(samplerate);
+	}
+
+	 int GetParameterCount(ReverbController* item)
+	{
+		return item->GetParameterCount();
+	}
+
+	 double* GetAllParameters(ReverbController* item)
+	{
+		return item->GetAllParameters();
+	}
+
+	 double GetScaledParameter(ReverbController* item, Parameter param)
+	{
+		return item->GetScaledParameter(param);
+	}
+
+	 void SetParameter(ReverbController* item, Parameter param, double value)
+	{
+		item->SetParameter(param, value);
+	}
+
+	 void ClearBuffers(ReverbController* item)
+	{
+		item->ClearBuffers();
+	}
+
+	 void Process(ReverbController* item, double* input, double* output, int bufferSize)
+	{
+		item->Process(input, output, bufferSize);
+	}
+}
+ReverbController* reverb = 0;
+
+
 extern "C" {
 	bool    demoMode = true;
 	bool    freeze = false;
@@ -206,7 +277,7 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
 	
 	
   TickData *data = (TickData *) dataPointer;
-  register StkFloat temp, outs[2], *samples = (StkFloat *) outputBuffer;
+  StkFloat temp, ins[2], outs[2], *samples = (StkFloat *) outputBuffer;
   int i, voiceNote, counter, nTicks = (int) nBufferFrames;
 
 
@@ -237,10 +308,13 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
 		  for (int i=0;i<counter;i++)
 		  {
 			  //Dekrispator sound
-			  make_sound_double(outs,1);
-
-			  outs[0] = data->reverbs[0].tick(outs[0]);
-			  outs[1] = data->reverbs[1].tick(outs[1]);
+			  make_sound_double(ins,1);
+			  
+			  Process(reverb, ins, outs, 1);
+			  //outs[0] = ins[0];
+			  //outs[1] = ins[1];
+			  //outs[0] = data->reverbs[0].tick(outs[0]);
+			  //outs[1] = data->reverbs[1].tick(outs[1]);
 			  *samples++ = outs[0]*masterVolume;
 			  *samples++ = outs[1]*masterVolume;
 		  }
@@ -259,6 +333,9 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
 
 int main( int argc, char *argv[] )
 {
+	double sampleRate = 44100.0;
+	reverb = Create(sampleRate);
+
 	//Dekrispator init
 	randomGen_init();
 	Synth_Init();
@@ -276,8 +353,9 @@ int main( int argc, char *argv[] )
   // If you want to change the default sample rate (set in Stk.h), do
   // it before instantiating any objects!  If the sample rate is
   // specified in the command line, it will override this setting.
-  Stk::setSampleRate( 44100.0 );
-
+  
+  Stk::setSampleRate(sampleRate);
+  
 	{
 	 RtMidiIn *midiin = 0;
 	 midiin = new RtMidiIn();
@@ -351,7 +429,14 @@ int main( int argc, char *argv[] )
   data.reverbs[0].setT60( data.t60 );
   data.reverbs[0].setEffectMix( 0.5 );
   data.reverbs[1].setT60( 2.0 );
-  data.reverbs[1].setEffectMix( 0.2 );
+  data.reverbs[1].setEffectMix( 0.5 );
+
+  
+  double* params = reverb->GetAllParameters();
+  for (int i = 0; i < reverb->GetParameterCount(); i++)
+  {
+  }
+  ClearBuffers(reverb);
 
  
   data.rateScaler = 22050.0 / Stk::sampleRate();
@@ -383,6 +468,8 @@ int main( int argc, char *argv[] )
   }
 
  cleanup:
+
+  Delete(reverb);
 
   return 0;
 

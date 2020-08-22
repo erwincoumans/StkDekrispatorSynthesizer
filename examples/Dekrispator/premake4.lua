@@ -7,10 +7,11 @@
 
   	includedirs {
                 ".",
-                "../../stk/include"
+                "../../stk/include",
+                "../../CloudSeed",
                 }
 			
-		links{ "stk"}
+		links{ "stk", "CloudSeed"}
 		defines {"__STK_REALTIME__"}	
 		files {
 		"**.cpp",

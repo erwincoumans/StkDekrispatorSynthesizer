@@ -23,11 +23,11 @@ namespace CloudSeed
 
 		ReverbChannel channelL;
 		ReverbChannel channelR;
-		double leftChannelIn[bufferSize];
-		double rightChannelIn[bufferSize];
-		double leftLineBuffer[bufferSize];
-		double rightLineBuffer[bufferSize];
-		double parameters[(int)Parameter::Count];
+		float leftChannelIn[bufferSize];
+		float rightChannelIn[bufferSize];
+		float leftLineBuffer[bufferSize];
+		float rightLineBuffer[bufferSize];
+		float parameters[(int)Parameter::Count];
 
 	public:
 		ReverbController(int samplerate)
@@ -56,7 +56,7 @@ namespace CloudSeed
 			parameters[(int)Parameter::DiffusionDelay] = 0.43500006198883057;
 			parameters[(int)Parameter::DiffusionFeedback] = 0.725000262260437;
 			parameters[(int)Parameter::LineCount] = 1.0;
-			parameters[(int)Parameter::LineDelay] = 0.68499988317489624;
+			parameters[(int)Parameter::LineDelay] = 10.68499988317489624;
 			parameters[(int)Parameter::LineDecay] = 0.68000012636184692;
 			parameters[(int)Parameter::LateDiffusionEnabled] = 1.0;
 			parameters[(int)Parameter::LateDiffusionStages] = 0.28571429848670959;
@@ -117,12 +117,12 @@ namespace CloudSeed
 			return (int)Parameter::Count;
 		}
 
-		double* GetAllParameters()
+		float* GetAllParameters()
 		{
 			return parameters;
 		}
 
-		double GetScaledParameter(Parameter param)
+		float GetScaledParameter(Parameter param)
 		{
 			switch (param)
 			{
@@ -200,7 +200,7 @@ namespace CloudSeed
 			return 0.0;
 		}
 
-		void SetParameter(Parameter param, double value)
+		void SetParameter(Parameter param, float value)
 		{
 			parameters[(int)param] = value;
 			auto scaled = GetScaledParameter(param);
@@ -217,7 +217,7 @@ namespace CloudSeed
 			channelR.ClearBuffers();
 		}
 
-		void Process(double* input, double* output, int bufferSize)
+		void Process(float* input, float* output, int bufferSize)
 		{
 			auto len = bufferSize;
 			auto cm = GetScaledParameter(Parameter::InputMix) * 0.5;
@@ -242,7 +242,7 @@ namespace CloudSeed
 		}
 		
 	private:
-		double P(Parameter para)
+		float P(Parameter para)
 		{
 			auto idx = (int)para;
 			return idx >= 0 && idx < (int)Parameter::Count ? parameters[idx] : 0.0;

@@ -81,17 +81,17 @@ extern "C"
 		return item->GetParameterCount();
 	}
 
-	 double* GetAllParameters(ReverbController* item)
+	 float* GetAllParameters(ReverbController* item)
 	{
 		return item->GetAllParameters();
 	}
 
-	 double GetScaledParameter(ReverbController* item, Parameter param)
+	 float GetScaledParameter(ReverbController* item, Parameter param)
 	{
 		return item->GetScaledParameter(param);
 	}
 
-	 void SetParameter(ReverbController* item, Parameter param, double value)
+	 void SetParameter(ReverbController* item, Parameter param, float value)
 	{
 		item->SetParameter(param, value);
 	}
@@ -101,7 +101,7 @@ extern "C"
 		item->ClearBuffers();
 	}
 
-	 void Process(ReverbController* item, double* input, double* output, int bufferSize)
+	 void Process(ReverbController* item, float* input, float* output, int bufferSize)
 	{
 		item->Process(input, output, bufferSize);
 	}
@@ -336,7 +336,12 @@ int tick( void *outputBuffer, void *inputBuffer1, unsigned int nBufferFrames,
 			  //Dekrispator sound
 			  make_sound_double(ins,1);
 			  
-			  Process(reverb, ins, outs, 1);
+			  float insf[2], outsf[2];
+			  insf[0] = ins[0];
+			  insf[1] = ins[1];
+			  Process(reverb, insf, outsf, 1);
+			  outs[0] = outsf[0];
+			  outs[1] = outsf[1];
 			  //outs[0] = ins[0];
 			  //outs[1] = ins[1];
 			  //outs[0] = data->reverbs[0].tick(outs[0]);

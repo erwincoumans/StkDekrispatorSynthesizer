@@ -17,7 +17,7 @@
 #include "../../CloudSeed/Default.h"
 #include "../../CloudSeed/ReverbController.h"
 #include "../../CloudSeed/FastSin.h"
-#include "../../CloudSeed/AudioLib\ValueTables.h"
+#include "../../CloudSeed/AudioLib/ValueTables.h"
 
 using namespace CloudSeed;
 bool isInitialized = false;
@@ -375,7 +375,8 @@ int main( int argc, char *argv[] )
   RtAudio dac;
   int i;
 
-  //if ( argc < 2 || argc > 6 ) usage();
+  int audioDevice=-1;
+
 
   // If you want to change the default sample rate (set in Stk.h), do
   // it before instantiating any objects!  If the sample rate is
@@ -430,6 +431,8 @@ int main( int argc, char *argv[] )
 	}
     else if ( !strcmp( argv[i], "-s" ) && ( i+1 < argc ) && argv[i+1][0] != '-')
       Stk::setSampleRate( atoi(argv[++i]) );
+    else if ( !strcmp( argv[i], "-o" ) && ( i+1 < argc ) && argv[i+1][0] != '-')
+      audioDevice = atoi(argv[++i]) ;
     else
       usage();
   }
@@ -442,7 +445,7 @@ int main( int argc, char *argv[] )
   // Allocate the dac here.
   RtAudioFormat format = ( sizeof(StkFloat) == 8 ) ? RTAUDIO_FLOAT64 : RTAUDIO_FLOAT32;
   RtAudio::StreamParameters parameters;
-  parameters.deviceId = 1;// dac.getDefaultOutputDevice();
+  parameters.deviceId = audioDevice>=0 ? audioDevice :  dac.getDefaultOutputDevice();
   parameters.nChannels = 2;
   unsigned int bufferFrames = RT_BUFFER_SIZE;
   try {
@@ -459,10 +462,6 @@ int main( int argc, char *argv[] )
   data.reverbs[1].setEffectMix( 0.5 );
 
   
-  double* params = reverb->GetAllParameters();
-  for (int i = 0; i < reverb->GetParameterCount(); i++)
-  {
-  }
   ClearBuffers(reverb);
 
  

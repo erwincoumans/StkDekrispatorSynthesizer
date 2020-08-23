@@ -15,8 +15,10 @@
 
 #include <cmath>
 #include "ReverbChannel.h"
-#include "AudioLib\ShaRandom.h"
+#include "AudioLib/ShaRandom.h"
 #include "Utils.h"
+
+extern void* custom_pool_allocate(size_t size);
 
 using namespace std;
 
@@ -75,7 +77,7 @@ namespace CloudSeed
 			this->channelLr = leftOrRight;
 
 			for (int i = 0; i < TotalLineCount; i++)
-				lines.push_back(new DelayLine(bufferSize, samplerate));
+				lines.push_back(new (custom_pool_allocate(sizeof(DelayLine)))DelayLine(bufferSize, samplerate));
 
 			this->bufferSize = bufferSize;
 
@@ -88,9 +90,9 @@ namespace CloudSeed
 			highPass.SetCutoffHz(20);
 			lowPass.SetCutoffHz(20000);
 
-			tempBuffer = new double[bufferSize];
-			lineOutBuffer = new double[bufferSize];
-			outBuffer = new double[bufferSize];
+			tempBuffer = new  (custom_pool_allocate(sizeof(double)*bufferSize))double[bufferSize];
+			lineOutBuffer = new (custom_pool_allocate(sizeof(double) * bufferSize))double[bufferSize];
+			outBuffer = new (custom_pool_allocate(sizeof(double) * bufferSize))double[bufferSize];
 
 			this->samplerate = samplerate;
 		}

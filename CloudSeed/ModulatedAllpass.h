@@ -4,6 +4,7 @@
 #include "ModulatedAllpass.h"
 #include "FastSin.h"
 #include "Utils.h"
+extern void* custom_pool_allocate(size_t size);
 
 namespace CloudSeed
 {
@@ -40,8 +41,8 @@ namespace CloudSeed
 		{
 			this->InterpolationEnabled = true;
 			this->bufferSize = bufferSize;
-			delayBuffer = new double[DelayBufferSamples];
-			output = new double[bufferSize];
+			delayBuffer = new (custom_pool_allocate(sizeof(double) * DelayBufferSamples)) double[DelayBufferSamples];
+			output = new (custom_pool_allocate(sizeof(double) * bufferSize)) double[bufferSize];
 			SampleDelay = sampleDelay;
 			index = DelayBufferSamples - 1;
 			modPhase = 0.01 + 0.98 * std::rand() / (double)RAND_MAX;
@@ -57,7 +58,7 @@ namespace CloudSeed
 		}
 
 
-		__forceinline double* GetOutput()
+		inline double* GetOutput()
 		{
 			return output;
 		}
@@ -134,7 +135,7 @@ namespace CloudSeed
 			}
 		}
 
-		__forceinline double Get(int delay)
+		inline double Get(int delay)
 		{
 			int idx = index - delay;
 			if (idx < 0)

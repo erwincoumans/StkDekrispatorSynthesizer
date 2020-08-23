@@ -7,6 +7,7 @@
 #include "MultitapDiffuser.h"
 #include "Utils.h"
 #include "AudioLib/ShaRandom.h"
+extern void* custom_pool_allocate(size_t size);
 
 namespace CloudSeed
 {
@@ -42,8 +43,8 @@ namespace CloudSeed
 		MultitapDiffuser(int delayBufferSize)
 		{
 			len = delayBufferSize;
-			buffer = new double[delayBufferSize];
-			output = new double[delayBufferSize];
+			buffer = new (custom_pool_allocate(sizeof(double) * delayBufferSize)) double[delayBufferSize];
+			output = new (custom_pool_allocate(sizeof(double) * delayBufferSize)) double[delayBufferSize];
 			index = 0;
 			count = 1;
 			length = 1;
